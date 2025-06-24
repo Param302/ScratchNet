@@ -1,40 +1,23 @@
-def run():
-    import streamlit as st
+def run(model, data, processed, house_col_desc):
     import numpy as np
     import pandas as pd
     import altair as alt
-    from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
+    import streamlit as st
 
-    # Get model and data from session state
-    model = st.session_state['model']
-    data = st.session_state['data']
-
-    # California housing dataset
     X = data['data']
     y = data['target']
-    columns = X.columns.tolist()
+    columns = processed['columns']
+    scaler = processed['scaler']
+    X_viz = processed['X_viz']
+    y_viz = processed['y_viz']
 
-    # Split and scale data for visualization and prediction
-    X_full = X.values if hasattr(X, 'values') else X
-    y_full = y.values if hasattr(y, 'values') else y
-    X_train, X_valid, y_train, y_valid = train_test_split(
-        X_full, y_full, test_size=0.2, random_state=37)
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_valid_scaled = scaler.transform(X_valid)
-    # For visualization and form, use unscaled X_train
-    X_viz = pd.DataFrame(X_train, columns=columns)
-
-    # Select up to 6 user-friendly columns for visualization
     viz_cols = ['MedInc', 'HouseAge', 'AveRooms',
                 'AveOccup', 'Latitude', 'Longitude']
     viz_cols = [col for col in viz_cols if col in columns][:6]
 
     st.header('California House Price Prediction')
-    st.markdown("It is a regression task that aims to predict the median house value in a block group based on 8 features such as median income, house age, average rooms, and location. This is a regression problem with the target label: MedHouseVal (Median House Value). The dataset is sourced from scikit-learn's built-in California Housing dataset.")
+    st.markdown("This app demonstrates a **regression** task to predict the _median house value_ in a California block group using 8 features such as median income, house age, average rooms, and location. **Target label:** MedHouseVal (Median House Value). _Dataset: scikit-learn's California Housing._")
 
-    # Visualizations (histogram distributions with Altair)
     st.subheader('Feature Distributions')
     viz_grid = st.columns(len(viz_cols), gap="medium")
     for i, col in enumerate(viz_cols):
@@ -46,7 +29,6 @@ def run():
             ).properties(height=250)
             st.altair_chart(chart, use_container_width=True)
 
-    # 2-column layout
     left, right = st.columns([1, 1])
 
     with left:
@@ -54,15 +36,6 @@ def run():
         form = st.form('house_form')
         inputs = {}
         col1, col2, col3 = form.columns(3)
-        # Short descriptions for house price columns
-        house_col_desc = {
-            'MedInc': 'Median income in block group',
-            'HouseAge': 'Median house age in years',
-            'AveRooms': 'Average rooms per household',
-            'AveOccup': 'Average household occupancy',
-            'Latitude': 'Block group latitude value',
-            'Longitude': 'Block group longitude value',
-        }
         for idx, col in enumerate([c for c in columns if c != 'MedHouseVal']):
             avg = float(np.mean(X_viz[col]))
             desc = house_col_desc.get(col, col.replace('_', ' ').capitalize())
@@ -109,7 +82,7 @@ def run():
         # Sample 500 points for scatter plot
         sample_df = pd.DataFrame({
             'MedInc': X_viz['MedInc'],
-            'MedHouseVal': y_train.flatten() if hasattr(y_train, 'flatten') else y_train
+            'MedHouseVal': processed['y_train'].flatten() if hasattr(processed['y_train'], 'flatten') else processed['y_train']
         })
         sample_df = sample_df.sample(
             n=min(500, len(sample_df)), random_state=42).reset_index(drop=True)
@@ -133,7 +106,6 @@ def run():
         else:
             st.altair_chart(base, use_container_width=True)
 
-    # Expanders
     exp_col1, exp_col2 = st.columns(2)
     with exp_col1:
         with st.expander('How the Model Works'):

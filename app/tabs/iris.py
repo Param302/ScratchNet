@@ -1,39 +1,21 @@
-def run():
+def run(model, data, processed, iris_col_desc):
     import streamlit as st
     import numpy as np
     import pandas as pd
     import altair as alt
-    from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
 
-    model = st.session_state['model']
-    data = st.session_state['data']
+    columns = processed['columns']
+    scaler = processed['scaler']
+    X_viz = processed['X_viz']
+    y_viz = processed['y_viz']
 
-    X = data['data']
-    y = data['target']
-    columns = X.columns.tolist()
-
-    # Split and scale data for visualization and prediction
-    X_full = X.values if hasattr(X, 'values') else X
-    y_full = y.values if hasattr(y, 'values') else y
-    X_train, X_valid, y_train, y_valid = train_test_split(
-        X_full, y_full, test_size=0.2, random_state=37)
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_valid_scaled = scaler.transform(X_valid)
-    # For visualization and form, use unscaled X_train
-    X_viz = pd.DataFrame(X_train, columns=columns)
-    y_viz = pd.Series(y_train)
-
-    # Select up to 4 user-friendly columns for visualization
     viz_cols = ['sepal length (cm)', 'sepal width (cm)',
                 'petal length (cm)', 'petal width (cm)']
     viz_cols = [col for col in viz_cols if col in columns][:4]
 
     st.header('Iris Flower Species Classification')
-    st.markdown("It is a multiclass classification task that aims to predict the species of an iris flower based on four features: sepal length, sepal width, petal length, and petal width. This is a 3-class classification problem with target labels: Setosa, Versicolor, and Virginica. The dataset is sourced from scikit-learn's built-in Iris dataset.")
+    st.markdown("This app demonstrates a **multiclass classification** task to predict the _species_ of an iris flower using four features: sepal length, sepal width, petal length, and petal width. **Target labels:** Setosa, Versicolor, Virginica. _Dataset: scikit-learn's Iris._")
 
-    # Visualizations (histogram distributions with Altair)
     st.subheader('Feature Distributions')
     viz_grid = st.columns(len(viz_cols), gap="medium")
     for i, col in enumerate(viz_cols):
@@ -45,7 +27,6 @@ def run():
             ).properties(height=250)
             st.altair_chart(chart, use_container_width=True)
 
-    # 2-column layout
     left, right = st.columns([1, 1])
 
     with left:
@@ -53,7 +34,6 @@ def run():
         form = st.form('iris_form')
         inputs = {}
         col1, col2 = form.columns(2)
-        # Short descriptions for iris columns
         iris_col_desc = {
             'sepal length (cm)': 'Sepal length in centimeters',
             'sepal width (cm)': 'Sepal width in centimeters',
@@ -97,20 +77,23 @@ def run():
         if st.session_state['prediction'] is not None:
             class_names = list(np.ravel(data['target_names']))
             pred_idx = int(st.session_state['prediction'])
-            pred_placeholder.success(f"{class_names[pred_idx]}")
-        # Pie chart for target value distribution
+            if 0 <= pred_idx < len(class_names):
+                pred_placeholder.success(f"{class_names[pred_idx]}")
+            else:
+                pred_placeholder.warning("Unknown class prediction")
+        
         pie_data = pd.DataFrame({'Species': y_viz})
         pie_counts = pie_data['Species'].value_counts(
         ).sort_index().reset_index()
         pie_counts.columns = ['Species', 'Count']
-        # Add class names for labels
+
         class_names = list(np.ravel(data['target_names']))
         pie_counts['Label'] = pie_counts['Species'].apply(
             lambda i: class_names[int(i)])
         palette = ['#83c9ff', "#F0F089", "#C28EFA"]
         pie_counts['BaseColor'] = [palette[i %
                                            len(palette)] for i in range(len(pie_counts))]
-        # Mark the predicted species
+    
         pred_species = None
         if st.session_state['prediction'] is not None:
             pred_species = int(st.session_state['prediction'])
@@ -124,7 +107,7 @@ def run():
         )
         st.altair_chart(pie_chart, use_container_width=True)
 
-    # Expanders
+
     exp_col1, exp_col2 = st.columns(2)
     with exp_col1:
         with st.expander('How the Model Works'):
