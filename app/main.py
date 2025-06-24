@@ -45,6 +45,7 @@ house_data, iris_data, cancer_data = get_data()
 # Set page config
 st.set_page_config(page_title='ScratchNet', page_icon='🧠', layout='wide')
 st.title('ScratchNet')
+st.markdown("This app demonstrates custom-built **Neural Networks** implemented from _scratch in Python **using only NumPy**_.")
 
 # Tabs with icons
 TABS = {

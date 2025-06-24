@@ -31,6 +31,7 @@ def run():
     viz_cols = [col for col in viz_cols if col in columns][:4]
 
     st.header('Iris Flower Species Classification')
+    st.markdown("It is a multiclass classification task that aims to predict the species of an iris flower based on four features: sepal length, sepal width, petal length, and petal width. This is a 3-class classification problem with target labels: Setosa, Versicolor, and Virginica. The dataset is sourced from scikit-learn's built-in Iris dataset.")
 
     # Visualizations (histogram distributions with Altair)
     st.subheader('Feature Distributions')

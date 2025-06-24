@@ -30,7 +30,8 @@ def run():
                 'mean area', 'mean smoothness', 'mean compactness']
     viz_cols = [col for col in viz_cols if col in columns][:6]
 
-    st.header('Breast Cancer Classification')
+    st.header('Breast Cancer Classifier')
+    st.markdown("It is a binary classification task that aims to distinguish between malignant and benign tumors based on 30 features computed from digitized images of fine needle aspirate (FNA) of breast mass. This is a 2-class classification problem with target labels: Benign (0) and Malignant (1). The dataset is sourced from scikit-learn's built-in Breast Cancer Wisconsin dataset.")
 
     # Visualizations (histogram distributions with Altair)
     st.subheader('Feature Distributions')

@@ -32,6 +32,7 @@ def run():
     viz_cols = [col for col in viz_cols if col in columns][:6]
 
     st.header('California House Price Prediction')
+    st.markdown("It is a regression task that aims to predict the median house value in a block group based on 8 features such as median income, house age, average rooms, and location. This is a regression problem with the target label: MedHouseVal (Median House Value). The dataset is sourced from scikit-learn's built-in California Housing dataset.")
 
     # Visualizations (histogram distributions with Altair)
     st.subheader('Feature Distributions')
