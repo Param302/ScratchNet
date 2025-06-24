@@ -18,13 +18,17 @@ def run():
 
     st.header('Iris Flower Species Classifier')
 
-    # Visualizations (varied chart types)
+    # Visualizations (histogram distributions with Altair)
     st.subheader('Feature Distributions')
     viz_grid = st.columns(len(viz_cols))
     for i, col in enumerate(viz_cols):
         with viz_grid[i]:
-            # For continuous features, show line chart (trend)
-            st.line_chart(pd.DataFrame(X[col], columns=[col]))
+            chart = alt.Chart(pd.DataFrame({col: X[col]})).mark_bar().encode(
+                alt.X(f"{col}:Q", bin=alt.Bin(maxbins=20), title=col),
+                y=alt.Y('count()', title=None),
+                tooltip=[col, 'count()']
+            ).properties(height=250)
+            st.altair_chart(chart, use_container_width=True)
 
     # 2-column layout
     left, right = st.columns([1, 1])
