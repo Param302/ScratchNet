@@ -1,3 +1,10 @@
+from NN.layers import Dense
+from NN.network import NeuralNetwork
+from NN.activations import Linear, ReLU, Sigmoid, Softmax
+from NN.loss import MSE, BinaryCrossEntropy, SparseCategoricalCrossEntropy
+from app.tabs.house_price import run as house_price_run
+from app.tabs.breast_cancer import run as breast_cancer_run
+from app.tabs.iris import run as iris_run
 import sys
 import pickle
 import streamlit as st
@@ -5,14 +12,6 @@ from pathlib import Path
 from sklearn.datasets import fetch_california_housing, load_iris, load_breast_cancer
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-
-from app.tabs.iris import run as iris_run
-from app.tabs.breast_cancer import run as breast_cancer_run
-from app.tabs.house_price import run as house_price_run
-from NN.loss import MSE, BinaryCrossEntropy, SparseCategoricalCrossEntropy
-from NN.activations import Linear, ReLU, Sigmoid, Softmax
-from NN.network import NeuralNetwork
-from NN.layers import Dense
 
 
 # Caching model loading
@@ -49,8 +48,8 @@ st.title('ScratchNet')
 
 # Tabs with icons
 TABS = {
-    '🏠 House Price Prediction': house_price_run,
-    '🩺 Breast Cancer Detection': breast_cancer_run,
+    '🏠 House Price Predictor': house_price_run,
+    '🩺 Breast Cancer Classifier': breast_cancer_run,
     '🌸 Iris Flower Classifier': iris_run,
 }
 tab_keys = list(TABS.keys())
