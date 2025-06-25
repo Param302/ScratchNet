@@ -81,7 +81,7 @@ def run(model, data, processed, iris_col_desc):
                 pred_placeholder.success(f"{class_names[pred_idx]}")
             else:
                 pred_placeholder.warning("Unknown class prediction")
-        
+
         pie_data = pd.DataFrame({'Species': y_viz})
         pie_counts = pie_data['Species'].value_counts(
         ).sort_index().reset_index()
@@ -93,7 +93,7 @@ def run(model, data, processed, iris_col_desc):
         palette = ['#83c9ff', "#F0F089", "#C28EFA"]
         pie_counts['BaseColor'] = [palette[i %
                                            len(palette)] for i in range(len(pie_counts))]
-    
+
         pred_species = None
         if st.session_state['prediction'] is not None:
             pred_species = int(st.session_state['prediction'])
@@ -107,20 +107,22 @@ def run(model, data, processed, iris_col_desc):
         )
         st.altair_chart(pie_chart, use_container_width=True)
 
-
     exp_col1, exp_col2 = st.columns(2)
     with exp_col1:
-        with st.expander('How the Model Works'):
+        with st.expander("Model Details"):
             st.markdown('''**Model Overview:**
 - This model has 5 layers:
     - 1 input layer (4 features)
     - 3 hidden layers (with 8, 16, and 64 neurons)
     - 1 output layer (3 classes)
 - Uses ReLU and Softmax activations
-- Loss Function: Sparse Categorical Cross Entropy
-
-**Total Parameters:** 1,955
-''')
+- Loss Function: Sparse Categorical Cross Entropy''')
+            param_col, btn_col = st.columns([3, 2])
+            with param_col:
+                st.markdown("**Total Parameters:** 1,955")
+            with btn_col:
+                st.link_button('View Model Architecture',
+                            'https://github.com/Param302/ScratchNet/blob/main/models/code/ANN_iris.py', use_container_width=True)
     with exp_col2:
         with st.expander('Performance & Training Insights'):
             st.markdown('''<b>Performance Metrics</b>''',

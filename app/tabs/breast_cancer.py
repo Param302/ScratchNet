@@ -84,20 +84,22 @@ def run(model, data, processed, cancer_col_desc):
         )
         st.altair_chart(pie_chart, use_container_width=True)
 
-
     exp_col1, exp_col2 = st.columns(2)
     with exp_col1:
-        with st.expander('How the Model Works'):
+        with st.expander("Model Details"):
             st.markdown('''**Model Overview:**
 - This model has 4 layers:
     - 1 input layer (30 features)
     - 2 hidden layers (30, 60, 15 neurons)
     - 1 output layer (1 value)
 - Uses ReLU and Sigmoid activations
-- Loss Function: Binary Cross Entropy
-
-**Total Parameters:** 3,721
-''')
+- Loss Function: Binary Cross Entropy''')
+            param_col, btn_col = st.columns([3, 2])
+            with param_col:
+                st.markdown("**Total Parameters:** 3,721")
+            with btn_col:
+                st.link_button('View Model Architecture',
+                               'https://github.com/Param302/ScratchNet/blob/main/models/code/ANN_Breast_cancer.py', use_container_width=True)
     with exp_col2:
         with st.expander('Performance & Training Insights'):
             st.markdown('''<b>Performance Metrics</b>''',
