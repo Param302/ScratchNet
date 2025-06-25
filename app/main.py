@@ -164,7 +164,7 @@ def get_cancer_col_desc():
 
 
 # Load models
-model_dir = Path('models')
+model_dir = Path('models/bin')
 house_model = load_model(model_dir / 'ANN_California_house.bin')
 iris_model = load_model(model_dir / 'ANN_Iris.bin')
 cancer_model = load_model(model_dir / 'ANN_Breast_cancer.bin')
