@@ -4,9 +4,7 @@
 
 ScratchNet is a demonstration of building and training **Artificial Neural Networks** (ANNs) _from scratch in Python using only NumPy_ - no deep learning frameworks. The models are trained on classic datasets and this app showcases their performance and predictions interactively.
 
-<video src="/assets/ScratchNet.mp4" controls width="100%" height="auto" poster="/assets/ScratchNet_thumbnail.png">
-    Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/c3f424a5-e140-444a-9551-38e12f93ff7e
 
 ---
 
