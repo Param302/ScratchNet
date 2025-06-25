@@ -203,6 +203,9 @@ for i, tab in enumerate(tab_objs):
         elif i == 2:
             iris_run(iris_model, iris_data, iris_processed, iris_col_desc)
 
-st.markdown('<hr style="margin-top:2em;">', unsafe_allow_html=True)
-st.markdown('<div style="text-align:center; color:gray;">Made by Parampreet Singh</div>',
-            unsafe_allow_html=True)
+st.markdown("""
+---
+<center>
+Made by <a href="https://parampreetsingh.me" target="_blank" style="text-decoration:none;"><strong>Parampreet Singh</strong></a> | <a href="https://github.com/Param302/ScratchNet" target="_blank" style="text-decoration:none;"><strong>GitHub</strong></a>
+</center>
+""", unsafe_allow_html=True)
