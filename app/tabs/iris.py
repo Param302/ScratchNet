@@ -42,18 +42,24 @@ def run(model, data, processed, iris_col_desc):
         }
         for idx, col in enumerate(columns):
             avg = float(np.mean(X_viz[col]))
+            min_val = float(np.min(X_viz[col]))
+            max_val = float(np.max(X_viz[col]))
             desc = iris_col_desc.get(col, col.replace('_', ' ').capitalize())
             help_txt = f"{desc[:40]} (default: {avg:.2f})"
             label_txt = col.title()
             if idx % 2 == 0:
                 inputs[col] = col1.number_input(
                     label=label_txt,
+                    min_value=min_val,
+                    max_value=max_val,
                     value=avg,
                     help=help_txt
                 )
             else:
                 inputs[col] = col2.number_input(
                     label=label_txt,
+                    min_value=min_val,
+                    max_value=max_val,
                     value=avg,
                     help=help_txt
                 )
@@ -122,7 +128,7 @@ def run(model, data, processed, iris_col_desc):
                 st.markdown("**Total Parameters:** 1,955")
             with btn_col:
                 st.link_button('View Model Architecture',
-                            'https://github.com/Param302/ScratchNet/blob/main/models/code/ANN_iris.py', use_container_width=True)
+                               'https://github.com/Param302/ScratchNet/blob/main/models/code/ANN_iris.py', use_container_width=True)
     with exp_col2:
         with st.expander('Performance & Training Insights'):
             st.markdown('''<b>Performance Metrics</b>''',

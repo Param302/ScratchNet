@@ -32,24 +32,32 @@ def run(model, data, processed, cancer_col_desc):
         col1, col2, col3 = form.columns(3)
         for idx, col in enumerate(columns):
             avg = float(np.mean(X_viz[col]))
+            min_val = float(np.min(X_viz[col]))
+            max_val = float(np.max(X_viz[col]))
             desc = cancer_col_desc.get(col, col.replace('_', ' ').capitalize())
             help_txt = f"{desc[:40]} (default: {avg:.2f})"
             label_txt = col.title()
             if idx % 3 == 0:
                 inputs[col] = col1.number_input(
                     label=label_txt,
+                    min_value=min_val,
+                    max_value=max_val,
                     value=avg,
                     help=help_txt
                 )
             elif idx % 3 == 1:
                 inputs[col] = col2.number_input(
                     label=label_txt,
+                    min_value=min_val,
+                    max_value=max_val,
                     value=avg,
                     help=help_txt
                 )
             else:
                 inputs[col] = col3.number_input(
                     label=label_txt,
+                    min_value=min_val,
+                    max_value=max_val,
                     value=avg,
                     help=help_txt
                 )
